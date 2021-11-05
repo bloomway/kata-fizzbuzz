@@ -10,6 +10,8 @@ public class FizzBuzzApp {
         final var result = IntStream.rangeClosed(1, 100)
                 .mapToObj(number -> app.convert(number) + "\n")
                 .collect(Collectors.joining());
+
+        System.out.println("Print numbers from 1 to 100:");
         System.out.println(result);
     }
 
