@@ -16,56 +16,71 @@ public class FizzBuzzApp {
     }
 
     public String convert(int number) {
-
-        final StringBuilder result = new StringBuilder();
         final String numberStr = String.valueOf(number);
 
-        if (containingOrDivisibleBy3(number) ||
-                containingOrDivisibleBy5(number)) {
+        if (!isConvertible(number)) {
+            return numberStr;
+        }
 
-            if (isDivisibleBy5(number) && isDivisibleBy3(number)) {
-                result.append("FizzBuzz");
-            }
-            else if (isDivisibleBy3(number)) {
-                result.append("Fizz");
-            }
-            else if (isDivisibleBy5(number)) {
-                result.append("Buzz");
-            }
-            result.append(convertNumberContaining3Or5(numberStr));
+        final StringBuilder result = new StringBuilder();
+        if (isDivisibleBy3And5(number)) {
+            addFizzBuzz(result);
+        } else if (isDivisibleBy3(number)) {
+            addFizz(result);
+        } else if (isDivisibleBy5(number)) {
+            addBuzz(result);
         }
-        else {
-            result.append(numberStr);
-        }
+        appendTo(result, convertNumberContaining3Or5(numberStr));
         return result.toString();
     }
 
-    private String convertNumberContaining3Or5(String numberStr) {
+    private boolean isConvertible(int number) {
+        return isContainingOrDivisibleBy3(number) ||
+                isContainingOrDivisibleBy5(number);
+    }
+
+    private String convertNumberContaining3Or5(String number) {
         final var result = new StringBuilder();
-        for (int i = 0; i < numberStr.length(); i++) {
-            final int value = Character.getNumericValue(numberStr.charAt(i));
+        for (int i = 0; i < number.length(); i++) {
+            final int value = Character.getNumericValue(number.charAt(i));
             final var valueString = String.valueOf(value);
 
-            if (containsNumber5(valueString)) {
-                result.append("Buzz");
+            if (itContainsNumber3(valueString)) {
+                addFizz(result);
             }
 
-            if (containsNumber3(valueString)) {
-                result.append("Fizz");
+            if (itContainsNumber5(valueString)) {
+                addBuzz(result);
             }
         }
         return result.toString();
     }
 
-    private boolean containingOrDivisibleBy5(int number) {
-        return containsNumber5(String.valueOf(number)) || isDivisibleBy5(number);
+    private void addFizzBuzz(StringBuilder result) {
+        appendTo(result, "FizzBuzz");
     }
 
-    private boolean containingOrDivisibleBy3(int number) {
-        return containsNumber3(String.valueOf(number)) || isDivisibleBy3(number);
+    private void addFizz(StringBuilder result) {
+        appendTo(result, "Fizz");
     }
 
-    private boolean containsNumber3(String value) {
+    private void addBuzz(StringBuilder result) {
+        appendTo(result, "Buzz");
+    }
+
+    private void appendTo(StringBuilder result, String content) {
+        result.append(content);
+    }
+
+    private boolean isContainingOrDivisibleBy5(int number) {
+        return itContainsNumber5(String.valueOf(number)) || isDivisibleBy5(number);
+    }
+
+    private boolean isContainingOrDivisibleBy3(int number) {
+        return itContainsNumber3(String.valueOf(number)) || isDivisibleBy3(number);
+    }
+
+    private boolean itContainsNumber3(String value) {
         return value.contains("3");
     }
 
@@ -73,11 +88,15 @@ public class FizzBuzzApp {
         return number % 3 == 0;
     }
 
-    private boolean containsNumber5(String value) {
+    private boolean itContainsNumber5(String value) {
         return value.contains("5");
     }
 
     private boolean isDivisibleBy5(int number) {
         return number % 5 == 0;
+    }
+
+    private boolean isDivisibleBy3And5(int number) {
+        return isDivisibleBy5(number) && isDivisibleBy3(number);
     }
 }
